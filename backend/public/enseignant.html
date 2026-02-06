@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Enseignant</title>
+  <link rel="stylesheet" href="./css/output.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- Header -->
+<header class="bg-blue-800 text-white p-4 flex justify-between items-center">
+  <h1 class="text-xl font-semibold">Dashboard Enseignant</h1>
+  <span class="text-sm">Dr. Jean Mukendi</span>
+</header>
+
+<!-- Main -->
+<main class="p-6 space-y-6">
+
+  <!-- Liste étudiants -->
+  <section class="bg-white rounded-xl shadow p-6">
+    <h2 class="text-lg font-bold mb-4">Étudiants sous ma direction</h2>
+    <table class="w-full border text-sm">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="p-2 border">Étudiant</th>
+          <th class="p-2 border">Sujet</th>
+          <th class="p-2 border">Statut</th>
+          <th class="p-2 border">Action</th>
+        </tr>
+      </thead>
+      <tbody id="etudiantsTable"></tbody>
+    </table>
+  </section>
+
+  <!-- Détails étudiant -->
+  <section class="bg-white rounded-xl shadow p-6 hidden" id="detailsSection">
+    <h2 class="text-lg font-bold mb-4">Détails de l’étudiant</h2>
+    <div id="detailsContent" class="text-gray-700"></div>
+  </section>
+
+</main>
+
+<!-- JS -->
+<script>
+  // Données simulées (comme venant du backend)
+  const etudiants = [
+    {
+      id: 1,
+      nom: 'Marie Kabeya',
+      sujet: 'IA et éducation',
+      statut: 'En cours',
+      description: 'Étude de l’impact de l’IA dans l’apprentissage universitaire.'
+    },
+    {
+      id: 2,
+      nom: 'Jean Ilunga',
+      sujet: 'Sécurité des systèmes d’information',
+      statut: 'Validé',
+      description: 'Analyse des failles de sécurité dans les réseaux d’entreprise.'
+    }
+  ];
+
+  const table = document.getElementById('etudiantsTable');
+  const detailsSection = document.getElementById('detailsSection');
+  const detailsContent = document.getElementById('detailsContent');
+
+  function chargerEtudiants() {
+    table.innerHTML = '';
+
+    etudiants.forEach(e => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="p-2 border">${e.nom}</td>
+        <td class="p-2 border">${e.sujet}</td>
+        <td class="p-2 border ${e.statut === 'Validé' ? 'text-green-600' : 'text-blue-600'}">${e.statut}</td>
+        <td class="p-2 border">
+          <button onclick="voirDetails(${e.id})" class="bg-blue-600 text-white px-3 py-1 rounded">Voir</button>
+        </td>
+      `;
+      table.appendChild(tr);
+    });
+  }
+
+  function voirDetails(id) {
+    const etudiant = etudiants.find(e => e.id === id);
+    if (!etudiant) return;
+
+    detailsContent.innerHTML = `
+      <p><strong>Nom :</strong> ${etudiant.nom}</p>
+      <p><strong>Sujet :</strong> ${etudiant.sujet}</p>
+      <p><strong>Description :</strong> ${etudiant.description}</p>
+      <p class="mt-2"><strong>Statut :</strong> ${etudiant.statut}</p>
+    `;
+
+    detailsSection.classList.remove('hidden');
+  }
+
+  chargerEtudiants();
+</script>
+
+</body>
+</html>

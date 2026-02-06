@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full ">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/output.css">
+    <title>Document</title>
+</head>
+<body style="background-image: url(/assets/back.jpg);" 
+class="w-full h-full bg-no repeat bg-cover bg-fixed flex justify-center items-center bg-opacity-50 ">
+
+ <div class="w-[60%] flex space-x-4 h-[60%]">
+    <div class="w-1/2 bg-red-400 font-bold bg-opacity-20 text-center rounded-md ">
+        <h1 class="">Une plateforme d'attribution des directeurs à UPL</h1>
+    </div>
+     
+    <form class="w-1/2 bg-purple-600 rounded-xl flex justify-center items-center bg-opacity-60" id="loginForm" method="POST" action="http://localhost:5400/user/auth/login"  enctype="application/x-www-form-urlencoded" >
+     
+      <div class="w-full space-x-3" >
+        <div>
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" name="nom" id="username">
+        </div>
+
+         <div>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+        </div>
+
+           <div>
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password">
+        </div>
+
+            <div>
+            <label for="matricule">Matricule</label>
+            <input type="number" name="matricule" id="matricule">
+        </div>
+
+          <div>
+            <label for="role">Role</label>
+            <select name="role" id="" required>
+                <option value="administrateur">Administrateur</option>
+                <option value="enseignant">Enseignant</option>
+                <option value="etudiant">Etudiant</option>
+            </select>
+        </div>
+
+        <div>
+            <button class="w-[200px] bg-blue-600 rounded-sm">Envoyer</button>
+        </div>
+
+       </div>
+        
+
+    </form>
+
+     </div>
+     <script src="Login.js"></script>
+</body>
+</html>

@@ -5,7 +5,11 @@ module.exports = {
     "./views/**/*.ejs"
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage:{
+        'back':"url(/public/assets/back.jpg)",
+      },
+    },
   },
   plugins: [],
 }

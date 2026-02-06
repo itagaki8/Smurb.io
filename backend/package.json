@@ -2,18 +2,21 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-"scripts": {
-  "dev": "node server.js",
-  "build:css": "npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch"
-},
+  "scripts": {
+    "dev": "node server.js",
+    "build:css": "npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "autoprefixer": "^10.4.23",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "express": "^5.2.1",
+    "mongoose": "^9.1.5",
+    "mongoose-unique-validator": "^4.0.1",
     "nodemon": "^3.1.11",
     "postcss": "^8.5.6",
     "postcss-cli": "^11.0.1"

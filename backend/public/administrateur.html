@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Administrateur</title>
+  <link rel="stylesheet" href="./css/output.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<header class="bg-blue-950 text-white p-4">
+  <h1 class="text-xl font-semibold">Administration</h1>
+</header>
+<main class="p-6 max-w-xl mx-auto">
+  <div class="bg-white rounded-xl shadow p-6">
+    <h2 class="text-lg font-bold mb-4">Créer un utilisateur</h2>
+    
+    <form class="space-y-4" method="post" action="http://localhost:5400/user/auth/signup">
+      <input type="text" placeholder="Nom complet" class="w-full p-2 border rounded-lg" required />
+      <input type="email" placeholder="Email" class="w-full p-2 border rounded-lg" required />
+      <select class="w-full p-2 border rounded-lg">
+        <option value="etudiant">Étudiant</option>
+        <option value="enseignant">Enseignant</option>
+        <option value="admin">Administrateur</option>
+      </select>
+      <button class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-red-700">Ajouter</button>
+    </form>
+  </div>
+</main>
+
+<script>
+  const form = document.querySelector('form');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const nom = form.querySelector('input[type="text"]').value;
+    const email = form.querySelector('input[type="email"]').value;
+    const role = form.querySelector('select').value;
+
+    alert(`Utilisateur créé :
+Nom : ${nom}
+Email : ${email}
+Rôle : ${role}`);
+
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
