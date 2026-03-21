@@ -13,13 +13,19 @@
   "dependencies": {
     "autoprefixer": "^10.4.23",
     "bcrypt": "^6.0.0",
+    "compromise": "^14.15.0",
+    "compute-cosine-similarity": "^1.1.0",
     "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.5",
     "mongoose-unique-validator": "^4.0.1",
+    "natural": "^8.1.1",
     "nodemon": "^3.1.11",
     "postcss": "^8.5.6",
-    "postcss-cli": "^11.0.1"
+    "postcss-cli": "^11.0.1",
+    "stopword": "^3.1.5"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.19"

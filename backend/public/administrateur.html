@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard Administrateur</title>
-  <link rel="stylesheet" href="./css/output.css">
+  <link rel="stylesheet" href="/css/output.css">
 </head>
 <body class="bg-gray-100 min-h-screen">
 
@@ -25,27 +25,11 @@
       </select>
       <button class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-red-700">Ajouter</button>
     </form>
+     <a href="/admin.html">Voir les sujets</a>
   </div>
 </main>
 
-<script>
-  const form = document.querySelector('form');
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const nom = form.querySelector('input[type="text"]').value;
-    const email = form.querySelector('input[type="email"]').value;
-    const role = form.querySelector('select').value;
-
-    alert(`Utilisateur créé :
-Nom : ${nom}
-Email : ${email}
-Rôle : ${role}`);
-
-    form.reset();
-  });
-</script>
 
 </body>
 </html>
