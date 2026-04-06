@@ -1,6 +1,7 @@
 // src/middlewares/auth.js
 const jwt = require('jsonwebtoken');
 
+
 require('dotenv').config()
 
 const motsecret=process.env.JWT_SECRET
