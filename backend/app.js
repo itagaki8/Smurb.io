@@ -3,7 +3,7 @@ const cors=require('cors');
 const path=require('path');
 const app=express();
 const mongoose=require('mongoose')
-const userRoute=require('./routes/Etudiant')
+const etudiantRoute=require('./routes/Etudiant')
 require("dotenv").config()
 const dataBaseUrl=process.env.DATABASE_URI
 
@@ -17,13 +17,13 @@ async function dbConnection() {
 }
 dbConnection()
 
-
+app.set('view engine','ejs')
 app.set('views',path.join(__dirname,"views"));
 app.use(express.static(path.join(__dirname,'public')))
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
-app.use('/',userRoute)
-// app.use('/etudiant/auth',userRoute)
+app.use('/',etudiantRoute)
+
 
 module.exports=app

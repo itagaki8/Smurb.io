@@ -65,7 +65,7 @@ exports.getAllUsers= (req,res,next)=>{
 //Acceder à la page etudiant pour le test
 exports.getEtudiant=async (req,res,next)=>{
     try{
-  await res.status(201).sendFile(path.join(__dirname,'..','public','Etudiant.html'))
+  await res.status(201).render('pages/Etudiant')
     }catch(err){
         res.status(500).json({err})
     }  
@@ -74,7 +74,7 @@ exports.getEtudiant=async (req,res,next)=>{
 //Acceder à la page administrateur pour le test
 exports.getAdmin=async (req,res,next)=>{
     try{
-  await res.status(201).sendFile(path.join(__dirname,'..','public','administrateur.html'))
+  await res.status(201).render('pages/administrateur')
     }catch(err){
         res.status(500).json({err})
     }  
@@ -92,7 +92,7 @@ exports.getEnseignant=async (req,res,next)=>{
 //Acceder à la page login pour le test
 exports.getLogin=async (req,res,next)=>{
     try{
-  await res.status(201).sendFile(path.join(__dirname,'..','public','Login.html'))
+  await res.status(201).render('pages/login')
     }catch(err){
         res.status(500).json({err})
     }  
