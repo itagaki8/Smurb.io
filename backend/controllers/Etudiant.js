@@ -1,58 +1,110 @@
 const Etudiant=require('../models/Etudiant')
 const bcrypt=require('bcrypt')
+const { populate } = require('dotenv')
 const jwt=require('jsonwebtoken')
 const path=require('path')
 
-exports.signUp=(req,res,next)=>{
-  bcrypt.hash(req.body.password,10)
-        .then((hash)=>{
-            const etudiant=new Etudiant({
-                nom:req.body.nom,
-                email:req.body.email,
-                password:hash,
-                matricule:req.body.matricule,
-            })
-            etudiant.save()
-                .then((etudiant)=>{ 
-                    const token=jwt.sign({nom:etudiant.nom},'yoyo',{ expiresIn: "1h" })
-                    
-                    return res.status(201).json({token})})
-                .catch(err=>{
-                    res.status(500).json({err})
-                    console.log(err)
-        })
-        })
-        .catch((err)=>{
-            res.status(500).json({err})
-            console.log(err)
-})
-}
 
-exports.login=(req,res,next)=>{
-    console.log(req.body)
-    Etudiant.findOne({email:req.body.email})
-    .then((etudiant)=>{
-        if (etudiant===null){
-            return res.status(401).json({message:'Identifiant ou mot de passe incorrecte!'})
-        }else{
-            bcrypt.compare(req.body.password, etudiant.password)
-               .then(valid =>{  
-                if(!valid){
-                    return res.status(401).json({message:'Identifiant ou mot de passe incorrecte!'})
-                }else{
-                    const token=jwt.sign({id:etudiant._id},'yoyo',{ expiresIn: "1h" })
-                    res.status(200).json({token,etudiant});
-                    // console.log(etudiant.role)
-                }
 
-               })
-               .catch(error=>res.status(500).json({error}))
-        }
-           
+// SIGNUP - avec session
+exports.signUp = (req, res, next) => {
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => {
+      const etudiant = new Etudiant({
+        nom: req.body.nom,
+        email: req.body.email,
+        password: hash,
+        matricule: req.body.matricule,
+      });
+      
+      etudiant.save()
+        .then((etudiant) => {
+          // Créer la session
+          req.session.userId = etudiant._id;
+          req.session.userType = 'etudiant';
+          
+          req.session.save((err) => {
+            if (err) {
+              console.error("Session error:", err);
+              return res.render("pages/login", { 
+                error: "Erreur lors de la création du compte" 
+              });
+            }
+            
+            // Rediriger vers l'espace étudiant
+            return res.redirect('/etudiant');
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          res.render("pages/login", { 
+            error: "Cet email ou matricule existe déjà" 
+          });
+        });
     })
-    .catch((err)=>res.status(500).json({err}))
+    .catch((err) => {
+      console.log(err);
+      res.render("pages/login", { 
+        error: "Erreur lors de la création du compte" 
+      });
+    });
+};
 
-}
+// LOGIN - avec session
+exports.login = (req, res, next) => {
+  // ✅ Utiliser .select('+password') pour inclure le champ password
+  Etudiant.findOne({ email: req.body.email }).select('+password')
+    .then((etudiant) => {
+      console.log("Email recherché:", req.body.email);
+      console.log("Étudiant trouvé:", etudiant ? etudiant.nom : "Non trouvé");
+      console.log("Password présent:", etudiant ? !!etudiant.password : false);
+      
+      if (!etudiant) {
+        return res.render("pages/login", {
+          error: "Identifiant incorrect"
+        });
+      }
+
+      // Vérifier que req.body.password existe
+      if (!req.body.password) {
+        return res.render("pages/login", {
+          error: "Veuillez entrer un mot de passe"
+        });
+      }
+
+      bcrypt.compare(req.body.password, etudiant.password)
+        .then(valid => {
+          if (!valid) {
+            return res.render("pages/login", {
+              error: "Mot de passe incorrect"
+            });
+          }
+
+          // Créer la session
+          req.session.userId = etudiant._id;
+          req.session.userType = 'etudiant';
+          
+          req.session.save((err) => {
+            if (err) {
+              console.error("Session error:", err);
+              return res.render("pages/login", {
+                error: "Erreur technique, veuillez réessayer"
+              });
+            }
+            
+            return res.redirect('/etudiant');
+          });
+        })
+        .catch(error => {
+          console.error("Bcrypt error:", error);
+          res.render("pages/login", { error: "Erreur lors de la connexion" });
+        });
+    })
+    .catch(error => {
+      console.error("Database error:", error);
+      res.render("pages/login", { error: "Erreur lors de la connexion" });
+    });
+};
 
 exports.getAllUsers= (req,res,next)=>{
 
@@ -63,36 +115,60 @@ exports.getAllUsers= (req,res,next)=>{
     
 }
 //Acceder à la page etudiant pour le test
-exports.getEtudiant=async (req,res,next)=>{
-    try{
-  await res.status(201).sendFile(path.join(__dirname,'..','public','Etudiant.html'))
-    }catch(err){
-        res.status(500).json({err})
-    }  
-}
+// controllers/Etudiant.js
+exports.getEtudiant = async (req, res, next) => {
+  console.log("Session complète:", req.session);
+  console.log("UserId:", req.session.userId);
+  
+  if (!req.session.userId) {
+    console.log("Pas de userId en session, redirection vers login");
+    return res.redirect('/login');
+  }
 
-//Acceder à la page administrateur pour le test
-exports.getAdmin=async (req,res,next)=>{
-    try{
-  await res.status(201).sendFile(path.join(__dirname,'..','public','administrateur.html'))
-    }catch(err){
-        res.status(500).json({err})
-    }  
-}
+  try {
+    const etudiant = await Etudiant.findById(req.session.userId)
+      .populate({
+        path: "sujet",
+        populate: {
+          path: "directeur"
+        }
+      });
 
-//Acceder à la page enseigant pour le test
-exports.getEnseignant=async (req,res,next)=>{
+    console.log("Étudiant trouvé:", etudiant ? etudiant.nom : "Non trouvé");
+
+    if (!etudiant) {
+      console.log("Étudiant non trouvé en BDD");
+      return res.redirect('/login');
+    }
+
+    res.render('pages/etudiantt', { 
+      etudiant,
+      hasSubmitted: etudiant.hasSubmitted || false
+    });
+
+  } catch (err) {
+    console.error("Erreur dans getEtudiant:", err);
+    res.redirect('/login');
+  }
+};
+//acceder à la page choice.ejs
+ exports.getChoice=async(req,res,next)=>{
     try{
-  await res.status(201).sendFile(path.join(__dirname,'..','public','enseignant.html'))
+        res.status(201).render('pages/choice')
     }catch(err){
-        res.status(500).json({err})
-    }  
-}
+        res.status(404).json({err})
+    }
+
+ }
+
+
+
+
 
 //Acceder à la page login pour le test
-exports.getLogin=async (req,res,next)=>{
+exports.getLogin= (req,res,next)=>{
     try{
-  await res.status(201).sendFile(path.join(__dirname,'..','public','Login.html'))
+   res.status(201).render('pages/login')
     }catch(err){
         res.status(500).json({err})
     }  

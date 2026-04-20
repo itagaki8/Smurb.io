@@ -1,0 +1,39 @@
+ <footer class="border-t border-slate-800 bg-[#0f172a] py-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex flex-col items-center md:items-start">
+                <p class="text-sm text-slate-500 font-medium">
+                    &copy; 2026 <span class="text-white font-bold">Smurb<span class="text-indigo-500">.io</span></span>. 
+                    Tous droits réservés.
+                </p>
+                <p class="text-[10px] text-slate-600 uppercase tracking-widest mt-1">
+                    Système Intelligent d'Attribution Sémantique
+                </p>
+            </div>
+
+            <div class="flex gap-6">
+                <a href="#" class="text-xs text-slate-500 hover:text-indigo-400 transition-colors">Aide</a>
+                <a href="#" class="text-xs text-slate-500 hover:text-indigo-400 transition-colors">Documentation API</a>
+                <a href="#" class="text-xs text-slate-500 hover:text-indigo-400 transition-colors">Confidentialité</a>
+            </div>
+
+            <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-800">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Serveur Opérationnel</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Exemple : Auto-hide des messages d'erreur après 5 secondes
+        const errorMsg = document.querySelector('.error-toast');
+        if(errorMsg) {
+            setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
