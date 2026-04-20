@@ -1,89 +1,64 @@
 const Sujet=require('../models/Sujet')
+const Etudiant=require('../models/Etudiant')
 
 const { attribuerDirecteur } = require('../Services/directeurService');
 const { detectSimilarite } = require('../Services/similariteService');
 
-// exports.sendSujets= async(req,res,next)=>{
-//     try{
-//    const sujet= await new Sujet({
-//       intitulé:req.body.intitulé,
-//       description:req.body.description
-//    })
-//    const saveSuj=await sujet.save()
-//    try{
-//     return res.status(200).json({saveSuj})
 
-//    }catch(err){
-//      res.status(500).json({err})
-//    }
-// }catch(err){
-//     res.status(500).json({err})
-// }
-// }
-
-exports.getEverySub= (req,res,next)=>{
-    Sujet.find({})
-       .then((sujet)=>{
-        res.status(201).json({sujet})
-       })
-       .catch((err)=>{
-        res.status(404).json({err})
-       })
-}
 
 exports.creatSub = async (req, res, next) => {
-  try {
+    try {
+        const userId = req.session.userId;
+        // On utilise 'intitule' pour correspondre à ton modèle
+        const { intitule, description } = req.body; 
 
-    const { intitule, description } = req.body;
+        if (!userId) return res.redirect('/login');
 
-    const texteComplet = `${intitule} ${description}`;
+        const texteComplet = `${intitule} ${description}`;
 
-    // 🔹 1. similarité
-    const data = await detectSimilarite(texteComplet);
-    const similarites = data.resultats || [];
+        // 1. Analyse de similarité
+        const data = await detectSimilarite(texteComplet);
+        const similarites = data.resultats || [];
+        const similaires = similarites.filter(s => s.score > 0.6);
 
-    const similaires = similarites.filter(s => s.score > 0.6);
+        // 2. Blocage si plagiat détecté (> 85%)
+        if (similaires.length > 0 && similaires[0].score > 0.85) {
+            const etudiant = await Etudiant.findById(userId);
+            return res.render('pages/etudiantt', {
+                etudiant,
+                hasSubmitted: false,
+                error: "Sujet trop similaire à un projet existant."
+            });
+        }
 
-    // 🔴 blocage
-    if(similaires.length > 0 && similaires[0].score > 0.85){
-      return res.status(400).json({
-        message: "Sujet trop similaire à un sujet existant",
-        similaires
-      });
+        // 3. Attribution du directeur
+        const { directeur, score } = await attribuerDirecteur(texteComplet);
+
+        // 4. Création du sujet avec tes champs exacts
+        const sujet = await Sujet.create({
+            intitule: intitule, // Utilisation de ton champ 'intitule'
+            description: description,
+            etudiant: userId,
+            directeur: directeur?._id,
+            scoreSimilarite: similaires[0]?.score || 0,
+            dateSoumission: new Date()
+        });
+
+        // 5. Mise à jour de l'étudiant pour basculer l'affichage
+        await Etudiant.findByIdAndUpdate(userId, {
+            hasSubmitted: true,
+            sujet: sujet._id
+        });
+
+        console.log(`🎯 Attribution Smurb.io : ${intitule} -> ${directeur?.nom}`);
+
+        // Redirection vers l'espace étudiant (qui affichera maintenant le directeur)
+        res.redirect('/etudiant');
+
+    } catch (err) {
+        console.error("Erreur soumission:", err);
+        res.status(500).redirect('/etudiant');
     }
-
-    // 🔹 2. directeur
-    const { directeur, score } = await attribuerDirecteur(texteComplet);
-
-    // 🔹 3. sauvegarde
-    const sujet = await Sujet.create({
-      intitule,
-      description,
-      etudiant: req.etudiant.id,
-      directeur: directeur?._id,
-      scoreSimilarite: similaires[0]?.score || 0,
-      dateSoumission: new Date()
-    });
-
-    // 🔹 debug
-    console.log("🎯 Sujet :", texteComplet);
-    console.log("👉 Directeur choisi :", directeur?.nom);
-    console.log("👉 Score :", score);
-
-    res.status(201).json({
-      message: "Sujet soumis avec succès",
-      sujet,
-      similaires,
-      directeur: directeur?.nom,
-      scoreDirecteur: score
-    });
-
-  } catch(err){
-    console.error(err);
-    res.status(500).json({
-      message: 'Erreur lors de la soumission'
-    });
-  }
 };
 
 exports.getAllSubjects=async(req,res,next)=>{

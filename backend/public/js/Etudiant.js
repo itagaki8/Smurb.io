@@ -1,4 +1,4 @@
-import { ROUTES } from "/config.js"
+import { ROUTES } from "./config.js"
 document.getElementById('soumission').addEventListener('submit',async(e)=>{
  e.preventDefault()
 const intitule=document.getElementById('intitule').value

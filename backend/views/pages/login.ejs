@@ -1,72 +1,87 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full ">
+<html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/output.css">
-    <title>Document</title>
+    <title>Smurb.io | Connexion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-</head>
+<body class="bg-[#0f172a] min-h-screen flex items-center justify-center p-4">
 
-<body class="bg-gradient-to-r from-blue-500 to-indigo-600 min-h-screen flex items-center justify-center">
+    <div class="relative w-full max-w-md animate__animated animate__fadeIn">
+        
+        <div class="absolute -top-10 -left-10 w-32 h-32 bg-indigo-600/20 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-blue-600/20 rounded-full blur-3xl"></div>
 
-<div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md">
+        <div class="bg-slate-900 border border-slate-800 shadow-2xl rounded-3xl p-10 relative z-10">
+            
+            <div class="text-center mb-10">
+                <h1 class="text-3xl font-black tracking-tighter text-white uppercase italic">
+                    SMURB<span class="text-indigo-500">.IO</span>
+                </h1>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest mt-2">
+                    Accès au Portail Intelligent
+                </p>
+            </div>
 
-<h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
-Connectez-vous!
-</h2>
+            <% if (typeof error !== 'undefined' && error) { %>
+            <div class="bg-red-900/20 border border-red-500/50 text-red-400 px-4 py-3 rounded-xl mb-6 text-sm animate__animated animate__shakeX">
+                <span class="font-bold">⚠️</span> <%= error %>
+            </div>
+            <% } %>
 
-<form id="loginForm" class="space-y-4" >
+            <form id="loginForm" class="space-y-6" method="POST" action='/login'>
 
+                <div>
+                    <label class="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">Adresse Email</label>
+                    <input 
+                        type="email" 
+                        id="email"
+                        name="email"
+                        placeholder="nom.etudiant@smurb.io"
+                        value="<%= typeof email !== 'undefined' ? email : '' %>"
+                        class="w-full px-5 py-4 bg-slate-800/50 border border-slate-700 rounded-2xl text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder:text-slate-600"
+                        required>
+                </div>
 
+                <div>
+                    <label class="block text-slate-400 text-[10px] font-black uppercase tracking-widest mb-2">Mot de passe</label>
+                    <input 
+                        type="password" 
+                        id="password"
+                        placeholder="••••••••"
+                        name="password"
+                        class="w-full px-5 py-4 bg-slate-800/50 border border-slate-700 rounded-2xl text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder:text-slate-600"
+                        required>
+                </div>
 
-<div>
-<label class="block text-gray-700 font-medium mb-1">Email</label>
-<input 
-type="email" 
-id="email"
-name="email"
-placeholder="exemple@email.com"
-class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-required>
-</div>
+                <div class="pt-2">
+                    <button 
+                        type="submit"
+                        class="w-full font-black uppercase tracking-widest bg-indigo-600 text-white py-4 rounded-2xl hover:bg-indigo-500 transition-all duration-300 shadow-lg shadow-indigo-900/40 active:scale-95">
+                        Se connecter
+                    </button>
+                </div>
 
+            </form>
 
-
-<div>
-<label class="block text-gray-700 font-medium mb-1">Mot de passe</label>
-<input 
-type="password" 
-id="password"
-placeholder="********"
-name="password"
-class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none"
-required>
-</div>
-
-<button 
-type="submit"
-class="w-full font-bold bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-
-Login
-
-</button>
-
-</form>
-
-<p class="text-sm text-gray-500 text-center mt-4">
-Vous n'avez pas de compte? 
-<a href="#" class="text-blue-600 hover:underline">
-Creez un compte
-</a>
-</p>
-
-</div>
-
-<script type="module" src="/js/Login.js">
-
-</script>
+            <div class="mt-8 pt-6 border-t border-slate-800 text-center">
+                <p class="text-sm text-slate-500">
+                    Nouveau sur Smurb ? 
+                    <a href="#" class="text-indigo-400 font-bold hover:text-indigo-300 transition-colors">
+                        Créer un compte
+                    </a>
+                </p>
+            </div>
+        </div>
+        
+        <p class="text-center text-slate-600 text-[10px] mt-6 font-bold uppercase tracking-widest">
+            An Itagaki's web product
+        </p>
+    </div>
 
 </body>
 </html>

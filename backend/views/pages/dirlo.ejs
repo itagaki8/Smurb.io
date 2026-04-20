@@ -1,0 +1,35 @@
+<%- include('../partials/head') %>
+<%- include('../partials/sidebar') %>
+
+<div class="max-w-5xl mx-auto animate__animated animate__fadeIn">
+    <div class="bg-blue-600 rounded-3xl p-10 mb-10 shadow-xl shadow-blue-900/20 text-white relative overflow-hidden">
+        <h2 class="text-3xl font-black relative z-10 italic">Mes Étudiants Dirigés</h2>
+        <p class="text-blue-100 opacity-80 relative z-10">Liste générée par analyse sémantique Smurb.io</p>
+        <div class="absolute right-[-20px] top-[-20px] text-white/10 text-9xl font-black">DIR</div>
+    </div>
+
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden italic">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    <th class="px-8 py-4">Nom de l'étudiant</th>
+                    <th class="px-8 py-4">Sujet de Recherche</th>
+                    <th class="px-8 py-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                <% diriges.forEach(item => { %>
+                    <tr class="hover:bg-slate-50/50 transition-colors">
+                        <td class="px-8 py-5 font-black text-slate-800"><%= item.nomEtudiant %></td>
+                        <td class="px-8 py-5 text-slate-500 font-medium">"<%= item.titreSujet %>"</td>
+                        <td class="px-8 py-5">
+                            <button class="bg-slate-900 text-white text-[10px] font-bold px-4 py-2 rounded-lg hover:bg-blue-600 transition-all">Consulter</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
