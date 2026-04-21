@@ -106,14 +106,6 @@ exports.login = (req, res, next) => {
     });
 };
 
-exports.getAllUsers= (req,res,next)=>{
-
-    Etudiant.find({})
-       .then((etudiant)=>res.status(201).json({etudiant:etudiant}))
-       .catch((err)=>res.status(500).json({err}))
-   
-    
-}
 //Acceder à la page etudiant pour le test
 // controllers/Etudiant.js
 exports.getEtudiant = async (req, res, next) => {
@@ -141,7 +133,7 @@ exports.getEtudiant = async (req, res, next) => {
       return res.redirect('/login');
     }
 
-    res.render('pages/etudiantt', { 
+    res.render('pages/etudiant', { 
       etudiant,
       hasSubmitted: etudiant.hasSubmitted || false
     });
@@ -163,6 +155,14 @@ exports.getEtudiant = async (req, res, next) => {
 
 
 
+exports.getAllUsers= (req,res,next)=>{
+
+    Etudiant.find({})
+       .then((etudiant)=>res.status(201).json({etudiant:etudiant}))
+       .catch((err)=>res.status(500).json({err}))
+   
+    
+}
 
 
 //Acceder à la page login pour le test
@@ -174,3 +174,17 @@ exports.getLogin= (req,res,next)=>{
     }  
 }
 
+//Logout
+
+exports.logout = (req, res) => {
+    // Détruire la session en base de données/mémoire
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Erreur lors de la déconnexion :", err);
+            return res.redirect('/etudiant');
+        }
+        // Effacer le cookie de session
+        res.clearCookie('connect.sid'); // Nom par défaut de express-session
+        res.redirect('/login');
+    });
+};

@@ -3,6 +3,7 @@ const etudiantCtrl=require('../controllers/Etudiant')
 const sujetCtrl=require('../controllers/sujet')
 const DirecteurCtrl=require("../controllers/Directeur")
 const express=require('express');
+const indexCtrl=require('../controllers/Index')
 const auth=require('../middleware/auth')
 const router=express.Router()
 
@@ -19,17 +20,11 @@ router.get('/users',etudiantCtrl.getAllUsers)
 router.get('/enseign',DirecteurCtrl.getEnseignant)
 router.get('/etudiant',etudiantCtrl.getEtudiant)
 router.get('/login',etudiantCtrl.getLogin)
-router.get('/choice',etudiantCtrl.getChoice)
-// router.get('/sujets')
+router.get('/',indexCtrl.getIndex)
 
-// router.get('/sujets',sujetCtrl.getEverySub)
-// router.get('/ancients',sujetCtrl.detectSimilarite)
-
-//Routes post
-// router.post('/sujet',sujetCtrl.sendSujets)
 router.post('/etudiant/soumission',sujetCtrl.creatSub)
 router.post('/directeur',DirecteurCtrl.CreatDirecteur)
-// router.get('/')
+router.get('/logout',etudiantCtrl.logout)
 router.get('/loggi',(req,res)=>{
     res.json(req.session)
 })
