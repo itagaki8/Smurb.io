@@ -1,33 +1,138 @@
 <%- include('../partials/head') %>
-<%- include('../partials/sidebar') %>
 
-<div class="max-w-7xl mx-auto animate__animated animate__fadeIn">
-    <div class="flex justify-between items-center mb-12">
-        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Console <span class="text-blue-600 underline decoration-4 underline-offset-8">Admin</span></h2>
-    </div>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col font-sans">
+    <%- include('../partials/navBar', { etudiant: etudiant }) %>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% directeurs.forEach(dir => { %>
-            <div class="glass-card rounded-3xl border border-slate-200 overflow-hidden hover-lift shadow-sm">
-                <div class="p-6 bg-slate-900 text-white">
-                    <h3 class="text-xl font-black mb-1"><%= dir.nom %></h3>
-                    <p class="text-blue-400 text-xs font-bold uppercase tracking-tighter"><%= dir.skills %></p>
+    <main class="max-w-7xl mx-auto w-full p-6 flex-grow">
+        
+        <section class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
+            <div class="animate__animated animate__fadeInDown">
+                <h2 class="text-4xl font-black text-white tracking-tighter">ADMIN<span class="text-indigo-500">PORTAL</span></h2>
+                <p class="text-slate-500 uppercase text-[10px] font-bold tracking-[0.2em]">Gestion des flux Smurb.io</p>
+            </div>
+            
+            <div class="flex gap-4 animate__animated animate__fadeInRight">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl min-w-[120px]">
+                    <p class="text-slate-500 text-[10px] uppercase font-bold">Étudiants</p>
+                    <p class="text-2xl font-black text-white"><%= stats.totalEtudiants %></p>
                 </div>
-                
-                <div class="p-6 bg-white">
-                    <p class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">Sujets Attribués</p>
-                    <div class="space-y-2">
-                        <% dir.listeSujets.forEach(sujet => { %>
-                            <div class="text-sm p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                                <span class="font-bold text-slate-700 truncate mr-2"><%= sujet.titre %></span>
-                                <span class="text-[9px] bg-slate-200 px-2 py-1 rounded font-black"><%= sujet.nomEtudiant %></span>
-                            </div>
-                        <% }) %>
-                    </div>
+                <div class="bg-indigo-600 p-4 rounded-2xl min-w-[120px] shadow-lg shadow-indigo-900/20">
+                    <p class="text-indigo-200 text-[10px] uppercase font-bold">Sujets IA</p>
+                    <p class="text-2xl font-black text-white"><%= stats.sujetsSoumis %></p>
                 </div>
             </div>
-        <% }) %>
-    </div>
-</div>
+        </section>
 
-<%- include('../partials/footer') %>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <aside class="space-y-6">
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-[32px] animate__animated animate__fadeInLeft shadow-2xl">
+                    <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-indigo-500 rounded-full"></span> Nouveau Membre
+                    </h3>
+
+                    <div class="flex bg-slate-800 p-1 rounded-xl mb-6">
+                        <button onclick="switchForm('etudiant')" id="btn-etudiant" class="flex-1 py-2 text-xs font-black uppercase tracking-widest rounded-lg bg-indigo-600 text-white transition-all">Étudiant</button>
+                        <button onclick="switchForm('directeur')" id="btn-directeur" class="flex-1 py-2 text-xs font-black uppercase tracking-widest rounded-lg text-slate-400 hover:text-white transition-all">Directeur</button>
+                    </div>
+                    
+                    <form id="form-etudiant" action="/admin/signup/etudiant" method="POST" class="space-y-4">
+                        <input type="text" name="nom" placeholder="Nom Complet" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 text-white" required>
+                        <input type="email" name="email" placeholder="Email Académique" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 text-white" required>
+                        <input type="text" name="matricule" placeholder="N° Matricule (ex: 22-MT-01)" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 text-white" required>
+                        <input type="password" name="password" placeholder="Mot de passe provisoire" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 text-white" required>
+                        
+                        <button type="submit" class="w-full bg-white text-[#0f172a] font-black py-3 rounded-xl hover:bg-indigo-400 transition-colors uppercase text-[10px] tracking-widest">
+                            Créer l'Étudiant
+                        </button>
+                    </form>
+
+                    <form id="form-directeur" action="/admin/signup/directeur" method="POST" class="space-y-4 hidden">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" name="nom" placeholder="Nom" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm text-white" required>
+                            <input type="text" name="prenom" placeholder="Prénom" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm text-white" required>
+                        </div>
+                        <input type="email" name="email" placeholder="Email Professionnel" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm text-white" required>
+                        <input type="tel" name="telephone" placeholder="Téléphone (ex: +33...)" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm text-white" required>
+                        <input type="text" name="skills" placeholder="Skills (ex: IA, Web, Cyber...)" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm text-white" required>
+                        <input type="password" name="password" placeholder="Mot de passe provisoire" class="w-full bg-slate-800/50 border-none rounded-xl p-3 text-sm text-white" required>
+                        
+                        <button type="submit" class="w-full bg-indigo-600 text-white font-black py-3 rounded-xl hover:bg-indigo-500 transition-colors uppercase text-[10px] tracking-widest">
+                            Créer le Directeur
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            <section class="lg:col-span-2 animate__animated animate__fadeInUp">
+                <div class="bg-slate-900 border border-slate-800 rounded-[32px] overflow-hidden shadow-2xl">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-800/50 border-b border-slate-800">
+                                <th class="p-5 text-[10px] uppercase font-bold text-slate-400">Étudiant</th>
+                                <th class="p-5 text-[10px] uppercase font-bold text-slate-400">Sujet (Intitulé)</th>
+                                <th class="p-5 text-[10px] uppercase font-bold text-slate-400">Directeur Alloué</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <% etudiants.forEach(etudiant => { %>
+                                <tr class="hover:bg-slate-800/30 transition-colors group">
+                                    <td class="p-5">
+                                        <p class="font-bold text-white text-sm group-hover:text-indigo-400 transition-colors"><%= etudiant.nom %></p>
+                                        <p class="text-[10px] text-slate-500 font-mono tracking-tighter"><%= etudiant.matricule %></p>
+                                    </td>
+                                    <td class="p-5">
+                                        <% if(etudiant.hasSubmitted && etudiant.sujet) { %>
+                                            <p class="text-sm text-slate-300 line-clamp-1"><%= etudiant.sujet.intitule %></p>
+                                        <% } else { %>
+                                            <span class="text-[9px] bg-slate-800 px-2 py-1 rounded-md text-slate-500 uppercase font-black">Pas encore de sujet</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="p-5">
+                                        <% if(etudiant.sujet && etudiant.sujet.directeur) { %>
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-6 h-6 bg-indigo-600/20 text-indigo-400 rounded flex items-center justify-center text-[10px] font-black">DR</div>
+                                                <p class="text-sm font-medium text-indigo-400">
+                                                    <%= directeurs.find(d => d._id.toString() === etudiant.sujet.directeur.toString())?.nom %>
+                                                </p>
+                                            </div>
+                                        <% } else { %>
+                                            <p class="text-xs italic text-slate-600 font-medium tracking-tight">Non attribué</p>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+    <script>
+        function switchForm(type) {
+            const formEtudiant = document.getElementById('form-etudiant');
+            const formDirecteur = document.getElementById('form-directeur');
+            const btnEtudiant = document.getElementById('btn-etudiant');
+            const btnDirecteur = document.getElementById('btn-directeur');
+
+            if (type === 'etudiant') {
+                formEtudiant.classList.remove('hidden');
+                formDirecteur.classList.add('hidden');
+                btnEtudiant.classList.add('bg-indigo-600', 'text-white');
+                btnEtudiant.classList.remove('text-slate-400');
+                btnDirecteur.classList.remove('bg-indigo-600', 'text-white');
+                btnDirecteur.classList.add('text-slate-400');
+            } else {
+                formEtudiant.classList.add('hidden');
+                formDirecteur.classList.remove('hidden');
+                btnDirecteur.classList.add('bg-indigo-600', 'text-white');
+                btnDirecteur.classList.remove('text-slate-400');
+                btnEtudiant.classList.remove('bg-indigo-600', 'text-white');
+                btnEtudiant.classList.add('text-slate-400');
+            }
+        }
+    </script>
+</body>

@@ -10,6 +10,15 @@ const directscema=mongoose.Schema({
         type:String,
         required:true
     },
+    telephone:{
+        type:String,
+        validate:{
+            validator:function(v){
+                return /^\+?[1-9]\d{1,14}$/.test(v);
+            },
+            message:props=>`${props.value} n'est pas un numéro de téléphone valide`
+        }
+    },
     password:{
         type:String,
         required:true

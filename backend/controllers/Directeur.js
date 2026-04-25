@@ -5,6 +5,9 @@ exports.CreatDirecteur = async (req, res, next) => {
     const directeur = new Directeur({
       nom: req.body.nom,
       prenom: req.body.prenom,   
+      telephone:req.body.telephone,
+      email:req.body.email,
+      password:req.body.password,
       skills: req.body.skills
     });
 
