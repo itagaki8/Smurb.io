@@ -23,19 +23,10 @@ router.get('/etudiant',etudiantCtrl.getEtudiant)
 router.get('/login',etudiantCtrl.getLogin)
 router.get('/',indexCtrl.getIndex)
 router.get('/admin',adminCtrl.getDashboard)
+router.get('/directeurs',DirecteurCtrl.getEveryDirecteur)
 
 router.post('/etudiant/soumission',sujetCtrl.creatSub)
 router.post('/admin/signup/directeur',DirecteurCtrl.CreatDirecteur)
 router.get('/logout',etudiantCtrl.logout)
-router.get('/loggi',(req,res)=>{
-    res.json(req.session)
-})
-// routes/Etudiant.js - Ajoutez cette route de test
-router.get('/check-session', (req, res) => {
-  res.json({
-    sessionId: req.session.id,
-    userId: req.session.userId,
-    session: req.session
-  });
-});
+
 module.exports=router;
