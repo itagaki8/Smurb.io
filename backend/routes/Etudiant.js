@@ -16,8 +16,6 @@ router.post('/admin/signup/etudiant',etudiantCtrl.signUp);
 router.post('/login',etudiantCtrl.login);
 router.get('/users',etudiantCtrl.getAllUsers)
 
-// Routes pour le teste des interfaces
-// router.get('/admin',etudiantCtrl.getAdmin)
 
 router.get('/etudiant',etudiantCtrl.getEtudiant)
 router.get('/login',etudiantCtrl.getLogin)
