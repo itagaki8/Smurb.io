@@ -1,6 +1,6 @@
 
 const etudiantCtrl=require('../controllers/Etudiant')
-const sujetCtrl=require('../controllers/sujet')
+const sujetCtrl=require('../controllers/Sujet')
 const DirecteurCtrl=require("../controllers/Directeur")
 const adminCtrl=require('../controllers/Admin')
 const express=require('express');
