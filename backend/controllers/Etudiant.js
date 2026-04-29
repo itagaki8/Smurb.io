@@ -131,7 +131,7 @@ exports.getEtudiant = async (req, res, next) => {
       return res.redirect('/login');
     }
 
-    res.render('pages/etudiant', { 
+    res.render('pages/Etudiant', { 
       etudiant,
       hasSubmitted: etudiant.hasSubmitted || false
     });
