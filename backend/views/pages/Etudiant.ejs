@@ -1,0 +1,76 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navBar') %>
+
+<main class="max-w-5xl mx-auto p-6 md:p-12">
+    
+    <section class="mb-12 animate__animated animate__fadeIn">
+        <h2 class="text-4xl font-extrabold text-white mb-2">Bonjour, <%= etudiant.nom %> 👋</h2>
+        <p class="text-slate-400">Gérez votre sujet de mémoire et suivez votre attribution en temps réel.</p>
+    </section>
+
+    <% if (!hasSubmitted) { %>
+        <div class="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 shadow-2xl animate__animated animate__fadeInUp">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="bg-indigo-600/20 p-3 rounded-2xl text-indigo-400">🚀</div>
+                <h3 class="text-xl font-bold text-white">Soumettre un nouveau sujet</h3>
+            </div>
+
+            <form action="/etudiant/soumission" method="POST" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Titre du Projet</label>
+                    <input type="text" name="intitule" required placeholder="Ex: Impact de l'IA sur le management..."
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Description détaillée</label>
+                    <textarea name="description" rows="5" required placeholder="Décrivez vos axes de recherche..."
+                        class="w-full bg-slate-800/50 border border-slate-700 rounded-xl p-4 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-900/20 transition-all transform hover:-translate-y-1">
+                    Analyser et Soumettre
+                </button>
+            </form>
+        </div>
+
+    <% } else { %>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate__animated animate__fadeIn">
+            
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8">
+                <span class="bg-green-500/10 text-green-400 text-[10px] font-black px-3 py-1 rounded-full uppercase mb-4 inline-block">Sujet Soumis</span>
+                <h3 class="text-2xl font-bold text-white leading-tight mb-4 tracking-tight">
+                    <%= etudiant.sujet ? etudiant.sujet.intitule : "Traitement en cours..." %>
+                </h3>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    <%= etudiant.sujet ? etudiant.sujet.description.substring(0, 150) + '...' : '' %>
+                </p>
+            </div>
+
+            <div class="bg-indigo-600 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl">
+                <div class="relative z-10">
+                    <h4 class="text-indigo-200 text-xs font-bold uppercase tracking-widest mb-6 italic">Directeur Attribué</h4>
+                    
+                    <% if (etudiant.sujet && etudiant.sujet.directeur) { %>
+                        <div class="flex items-center gap-4">
+                            <div class="w-16 h-16 bg-white/10 backdrop-blur-lg rounded-2xl flex items-center justify-center text-2xl font-black">
+                                <%= etudiant.sujet.directeur.nom.charAt(0) %>
+                            </div>
+                            <div>
+                                <p class="text-xl font-black"><%= etudiant.sujet.directeur.nom %></p>
+                                <p class="text-indigo-200 text-sm"><%= etudiant.sujet.directeur.email %></p>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-6 border-t border-indigo-500/50">
+                            <p class="text-xs font-medium text-indigo-100 uppercase mb-2 italic">Expertise principale</p>
+                            <span class="bg-white/20 px-3 py-1 rounded-lg text-xs font-bold uppercase"><%= etudiant.sujet.directeur.skills || 'Non spécifiée' %></span>
+                        </div>
+                    <% } else { %>
+                        <p class="italic text-indigo-100 animate-pulse">Analyse de similarité en cours par Smurb AI...</p>
+                    <% } %>
+                </div>
+                <div class="absolute -right-4 -bottom-4 text-white/5 text-8xl font-black italic">SMURB</div>
+            </div>
+        </div>
+    <% } %>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "node server.js",
     "build:css": "npx tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch"
@@ -24,6 +24,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.5",
     "mongoose-unique-validator": "^4.0.1",
+    "multer": "^2.1.1",
     "natural": "^8.1.1",
     "nodemon": "^3.1.11",
     "postcss": "^8.5.6",

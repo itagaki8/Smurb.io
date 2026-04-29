@@ -1,33 +1,162 @@
 <%- include('../partials/head') %>
-<%- include('../partials/sidebar') %>
 
-<div class="max-w-7xl mx-auto animate__animated animate__fadeIn">
-    <div class="flex justify-between items-center mb-12">
-        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Console <span class="text-blue-600 underline decoration-4 underline-offset-8">Admin</span></h2>
-    </div>
+<body class="bg-[#020617] text-slate-200 min-h-screen flex flex-col font-sans">
+    <%- include('../partials/navBar') %>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <% directeurs.forEach(dir => { %>
-            <div class="glass-card rounded-3xl border border-slate-200 overflow-hidden hover-lift shadow-sm">
-                <div class="p-6 bg-slate-900 text-white">
-                    <h3 class="text-xl font-black mb-1"><%= dir.nom %></h3>
-                    <p class="text-blue-400 text-xs font-bold uppercase tracking-tighter"><%= dir.skills %></p>
-                </div>
-                
-                <div class="p-6 bg-white">
-                    <p class="text-[10px] font-black text-slate-400 uppercase mb-4 tracking-widest">Sujets Attribués</p>
-                    <div class="space-y-2">
-                        <% dir.listeSujets.forEach(sujet => { %>
-                            <div class="text-sm p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center">
-                                <span class="font-bold text-slate-700 truncate mr-2"><%= sujet.titre %></span>
-                                <span class="text-[9px] bg-slate-200 px-2 py-1 rounded font-black"><%= sujet.nomEtudiant %></span>
-                            </div>
-                        <% }) %>
+    <main class="max-w-7xl mx-auto w-full p-8 flex-grow">
+        
+        <header class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+            <div class="animate__animated animate__fadeInLeft">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="w-10 h-1 h-10 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
                     </div>
+                    <h2 class="text-4xl font-black text-white tracking-tighter">MASTER<span class="text-amber-500">CONTROL</span></h2>
+                </div>
+                <p class="text-slate-500 uppercase text-[10px] font-bold tracking-[0.4em] ml-1">Système de gestion centralisé • SMURB.IO</p>
+            </div>
+            
+            <div class="flex gap-4 animate__animated animate__fadeInRight">
+                <div class="bg-slate-900/50 border border-slate-800 p-5 rounded-[24px] min-w-[140px] backdrop-blur-sm">
+                    <p class="text-slate-500 text-[10px] uppercase font-bold mb-1">Étudiants</p>
+                    <p class="text-3xl font-black text-white"><%= stats.totalEtudiants %></p>
+                </div>
+                <div class="bg-amber-500 p-5 rounded-[24px] min-w-[140px] shadow-xl shadow-amber-500/10">
+                    <p class="text-amber-900 text-[10px] uppercase font-bold mb-1">Directeurs</p>
+                    <p class="text-3xl font-black text-slate-900"><%= stats.totalDirecteurs %></p>
                 </div>
             </div>
-        <% }) %>
-    </div>
-</div>
+        </header>
 
-<%- include('../partials/footer') %>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <aside class="lg:col-span-4 space-y-6">
+                <div class="bg-slate-900 border border-slate-800 p-8 rounded-[40px] animate__animated animate__fadeInLeft shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+                    
+                    <h3 class="text-lg font-bold text-white mb-8 flex items-center gap-3">
+                        Enregistrement
+                    </h3>
+
+                    <div class="flex bg-black/40 p-1.5 rounded-2xl mb-8 border border-slate-800">
+                        <button onclick="switchForm('etudiant')" id="btn-etudiant" class="flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl bg-amber-500 text-slate-900 transition-all shadow-lg">Étudiant</button>
+                        <button onclick="switchForm('directeur')" id="btn-directeur" class="flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl text-slate-500 hover:text-white transition-all">Directeur</button>
+                    </div>
+                    
+                    <form id="form-etudiant" action="/admin/signup/etudiant" method="POST" class="space-y-5">
+                        <div class="space-y-1">
+                            <label class="text-[9px] uppercase font-bold text-slate-500 ml-2">Informations Générales</label>
+                            <input type="text" name="nom" placeholder="Nom Complet" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none transition-all" required>
+                        </div>
+                        <input type="email" name="email" placeholder="Email Académique" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none" required>
+                        <input type="text" name="matricule" placeholder="N° Matricule" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none" required>
+                        <input type="password" name="password" placeholder="Mot de passe" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none" required>
+                        
+                        <button type="submit" class="w-full bg-white text-slate-900 font-black py-4 rounded-2xl hover:bg-amber-500 transition-all transform hover:scale-[1.02] uppercase text-[10px] tracking-[0.2em] mt-4">
+                            Valider l'inscription
+                        </button>
+                    </form>
+
+                    <form id="form-directeur" action="/admin/signup/directeur" method="POST" class="space-y-5 hidden">
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="text" name="nom" placeholder="Nom" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none">
+                            <input type="text" name="prenom" placeholder="Prénom" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none">
+                        </div>
+                        <input type="email" name="email" placeholder="Email Pro" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none">
+                        <input type="text" name="skills" placeholder="Expertises (séparées par virgules)" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none">
+                        <input type="text" name="telephone" placeholder="+243****7778" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none">
+                        <input type="password" name="password" placeholder="Mot de passe" class="w-full bg-slate-800/40 border border-slate-700/50 rounded-2xl p-4 text-sm text-white focus:ring-2 focus:ring-amber-500 outline-none">
+                        
+                        <button type="submit" class="w-full bg-amber-500 text-slate-900 font-black py-4 rounded-2xl hover:bg-amber-400 transition-all transform hover:scale-[1.02] uppercase text-[10px] tracking-[0.2em] mt-4">
+                            Enregistrer Directeur
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            <section class="lg:col-span-8 animate__animated animate__fadeInUp">
+                <div class="bg-slate-900 border border-slate-800 rounded-[40px] overflow-hidden shadow-2xl">
+                    <div class="p-8 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                        <h3 class="font-black text-white uppercase text-xs tracking-widest">Base de données Étudiants</h3>
+                        <span class="bg-slate-800 text-slate-400 text-[9px] px-3 py-1 rounded-full font-bold uppercase">Temps réel</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-black/20 text-[10px] uppercase font-bold text-slate-500">
+                                    <th class="p-6">Identité</th>
+                                    <th class="p-6">Projet de recherche</th>
+                                    <th class="p-6">Statut Attribution</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/50">
+                                <% etudiants.forEach(etudiant => { %>
+                                    <tr class="hover:bg-amber-500/[0.02] transition-colors group">
+                                        <td class="p-6">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-amber-500 font-black text-xs border border-slate-700">
+                                                    <%= etudiant.nom.charAt(0) %>
+                                                </div>
+                                                <div>
+                                                    <p class="font-bold text-white text-sm group-hover:text-amber-500 transition-colors"><%= etudiant.nom %></p>
+                                                    <p class="text-[10px] text-slate-500 font-mono"><%= etudiant.matricule %></p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="p-6">
+                                            <% if(etudiant.hasSubmitted && etudiant.sujet) { %>
+                                                <p class="text-sm text-slate-300 font-medium line-clamp-1 italic">"<%= etudiant.sujet.intitule %>"</p>
+                                            <% } else { %>
+                                                <span class="text-[9px] text-slate-600 uppercase font-black tracking-tighter">En attente de dépôt</span>
+                                            <% } %>
+                                        </td>
+                                        <td class="p-6 text-right">
+                                            <% if(etudiant.sujet && etudiant.sujet.directeur) { %>
+                                                <div class="inline-flex items-center gap-3 bg-slate-800/50 px-4 py-2 rounded-2xl border border-slate-700">
+                                                    <p class="text-xs font-bold text-amber-500">
+                                                        <%= directeurs.find(d => d._id.toString() === etudiant.sujet.directeur.toString())?.nom %>
+                                                    </p>
+                                                </div>
+                                            <% } else { %>
+                                                <button class="text-[9px] bg-red-500/10 text-red-500 border border-red-500/20 px-4 py-2 rounded-xl font-black uppercase hover:bg-red-500 hover:text-white transition-all">
+                                                    Non Alloué
+                                                </button>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="p-8 text-center border-t border-slate-900">
+        <p class="text-[10px] text-slate-600 font-bold uppercase tracking-[0.5em]">Smurb Terminal v2.0 • Secured Environment</p>
+    </footer>
+
+    <script>
+        function switchForm(type) {
+            const fEtudiant = document.getElementById('form-etudiant');
+            const fDirecteur = document.getElementById('form-directeur');
+            const bEtudiant = document.getElementById('btn-etudiant');
+            const bDirecteur = document.getElementById('btn-directeur');
+
+            if (type === 'etudiant') {
+                fEtudiant.classList.remove('hidden');
+                fDirecteur.classList.add('hidden');
+                bEtudiant.className = "flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl bg-amber-500 text-slate-900 transition-all shadow-lg";
+                bDirecteur.className = "flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl text-slate-500 hover:text-white transition-all";
+            } else {
+                fEtudiant.classList.add('hidden');
+                fDirecteur.classList.remove('hidden');
+                bDirecteur.className = "flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl bg-amber-500 text-slate-900 transition-all shadow-lg";
+                bEtudiant.className = "flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-xl text-slate-500 hover:text-white transition-all";
+            }
+        }
+    </script>
+</body>

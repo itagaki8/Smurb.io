@@ -13,6 +13,10 @@ const sujetModel=mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'Directeur',
         default:null
+    },
+    dateSoumission:{
+        type:Date,
+        default:Date.now
     }
 })
 module.exports=mongoose.model('Sujet',sujetModel)

@@ -2,43 +2,36 @@
 const etudiantCtrl=require('../controllers/Etudiant')
 const sujetCtrl=require('../controllers/sujet')
 const DirecteurCtrl=require("../controllers/Directeur")
+const adminCtrl=require('../controllers/Admin')
 const express=require('express');
+const indexCtrl=require('../controllers/Index')
 const auth=require('../middleware/auth')
 const router=express.Router()
 
 
 
+router.post('/admin/signup',adminCtrl.createAdmin)
 
-
-router.post('/signup',etudiantCtrl.signUp);
+router.post('/admin/signup/etudiant',etudiantCtrl.signUp);
 router.post('/login',etudiantCtrl.login);
 router.get('/users',etudiantCtrl.getAllUsers)
 
 // Routes pour le teste des interfaces
 // router.get('/admin',etudiantCtrl.getAdmin)
-router.get('/enseign',DirecteurCtrl.getEnseignant)
+
 router.get('/etudiant',etudiantCtrl.getEtudiant)
 router.get('/login',etudiantCtrl.getLogin)
-router.get('/choice',etudiantCtrl.getChoice)
-// router.get('/sujets')
+router.get('/',indexCtrl.getIndex)
+router.get('/logindir',DirecteurCtrl.getLogindirecteur)
+router.get('/admin',adminCtrl.getDashboard)
+router.get('/directeur',DirecteurCtrl.getDirecteurDashboard)
+router.get('/admin/login',adminCtrl.getLoginAdmin)
 
-// router.get('/sujets',sujetCtrl.getEverySub)
-// router.get('/ancients',sujetCtrl.detectSimilarite)
 
-//Routes post
-// router.post('/sujet',sujetCtrl.sendSujets)
+router.post('/login-directeur',DirecteurCtrl.loginDirecteur)
+router.post('/login-admin',adminCtrl.loginAdmin)
 router.post('/etudiant/soumission',sujetCtrl.creatSub)
-router.post('/directeur',DirecteurCtrl.CreatDirecteur)
-// router.get('/')
-router.get('/loggi',(req,res)=>{
-    res.json(req.session)
-})
-// routes/Etudiant.js - Ajoutez cette route de test
-router.get('/check-session', (req, res) => {
-  res.json({
-    sessionId: req.session.id,
-    userId: req.session.userId,
-    session: req.session
-  });
-});
+router.post('/admin/signup/directeur',DirecteurCtrl.CreatDirecteur)
+router.get('/logout',etudiantCtrl.logout)
+
 module.exports=router;

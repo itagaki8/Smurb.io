@@ -17,12 +17,6 @@ async function dbConnection() {
       }
 }
 dbConnection()
-
-
-// app.use((req, res, next) => {
-//   console.log("ROUTE HIT:", req.method, req.url);
-//   next();
-// });
 app.set('view engine','ejs')
 app.set('views',path.join(__dirname,"views"));
 // app.js
