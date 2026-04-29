@@ -21,8 +21,7 @@ function nettoyerTexte(texte){
 }
 
 // 🔹 cosine similarity
-function cosineSimilarity(vecA, vecB){
-
+function cosineSimilarity(vecA, vecB) {
   let dotProduct = 0;
   let normA = 0;
   let normB = 0;
@@ -32,13 +31,14 @@ function cosineSimilarity(vecA, vecB){
   allKeys.forEach(key => {
     const a = vecA[key] || 0;
     const b = vecB[key] || 0;
-
     dotProduct += a * b;
     normA += a * a;
     normB += b * b;
   });
 
-  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+  const magnitude = Math.sqrt(normA) * Math.sqrt(normB);
+  if (magnitude === 0) return 0; // Évite le chargement infini/NaN
+  return dotProduct / magnitude;
 }
 
 // 🔹 construire vecteurs TF-IDF

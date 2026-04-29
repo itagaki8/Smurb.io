@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/output.css">
+    <title>Smurb.io | Connexion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0f172a] text-slate-200 min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-md animate__animated animate__fadeIn">
+        <div class="flex flex-col items-center mb-10">
+            <div class="flex items-center gap-2 mb-2">
+                <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center">
+                    <span class="text-[#0f172a] font-black text-xl">A</span>
+                </div>
+                <h1 class="text-2xl font-black text-white">SMURB<span class="text-amber-500">.ADMIN</span></h1>
+            </div>
+            <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em]">Console de Gestion</p>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-[32px] shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-amber-500"></div>
+
+            <form action="/login-admin" method="POST" class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-2 ml-1">Email Administrateur</label>
+                    <input type="email" name="email" required class="w-full bg-slate-800/50 border border-slate-700 rounded-2xl p-4 text-white outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase text-slate-500 mb-2 ml-1">Mot de passe</label>
+                    <input type="password" name="password" required class="w-full bg-slate-800/50 border border-slate-700 rounded-2xl p-4 text-white outline-none focus:ring-2 focus:ring-amber-500 transition-all">
+                </div>
+
+                <% if (locals.error) { %>
+                    <p class="text-red-400 text-[10px] font-bold text-center uppercase"><%= error %></p>
+                <% } %>
+
+                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-[#0f172a] font-black py-4 rounded-2xl transition-all transform hover:-translate-y-1 uppercase text-xs tracking-widest">
+                    Accéder au Panneau
+                </button>
+            </form>
+        </div>
+    </div>
+</body>

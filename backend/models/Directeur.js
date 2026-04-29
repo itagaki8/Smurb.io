@@ -12,6 +12,7 @@ const directscema=mongoose.Schema({
     },
     telephone:{
         type:String,
+        unique:true,
         validate:{
             validator:function(v){
                 return /^\+?[1-9]\d{1,14}$/.test(v);

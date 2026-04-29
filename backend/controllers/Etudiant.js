@@ -119,12 +119,10 @@ exports.getEtudiant = async (req, res, next) => {
 
   try {
     const etudiant = await Etudiant.findById(req.session.userId)
-      .populate({
-        path: "sujet",
-        populate: {
-          path: "directeur"
-        }
-      });
+    .populate({
+        path: 'sujet',
+        populate: { path: 'directeur' } 
+    });
 
     console.log("Étudiant trouvé:", etudiant ? etudiant.nom : "Non trouvé");
 

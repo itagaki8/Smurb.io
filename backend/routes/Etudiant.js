@@ -10,7 +10,7 @@ const router=express.Router()
 
 
 
-
+router.post('/admin/signup',adminCtrl.createAdmin)
 
 router.post('/admin/signup/etudiant',etudiantCtrl.signUp);
 router.post('/login',etudiantCtrl.login);
@@ -18,13 +18,18 @@ router.get('/users',etudiantCtrl.getAllUsers)
 
 // Routes pour le teste des interfaces
 // router.get('/admin',etudiantCtrl.getAdmin)
-router.get('/enseign',DirecteurCtrl.getEnseignant)
+
 router.get('/etudiant',etudiantCtrl.getEtudiant)
 router.get('/login',etudiantCtrl.getLogin)
 router.get('/',indexCtrl.getIndex)
+router.get('/logindir',DirecteurCtrl.getLogindirecteur)
 router.get('/admin',adminCtrl.getDashboard)
-router.get('/directeurs',DirecteurCtrl.getEveryDirecteur)
+router.get('/directeur',DirecteurCtrl.getDirecteurDashboard)
+router.get('/admin/login',adminCtrl.getLoginAdmin)
 
+
+router.post('/login-directeur',DirecteurCtrl.loginDirecteur)
+router.post('/login-admin',adminCtrl.loginAdmin)
 router.post('/etudiant/soumission',sujetCtrl.creatSub)
 router.post('/admin/signup/directeur',DirecteurCtrl.CreatDirecteur)
 router.get('/logout',etudiantCtrl.logout)
