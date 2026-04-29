@@ -49,7 +49,7 @@ exports.signUp = (req, res, next) => {
       });
     });
 };
-
+//Modification du nom du fichier
 // LOGIN - avec session
 exports.login = (req, res, next) => {
   // ✅ Utiliser .select('+password') pour inclure le champ password
